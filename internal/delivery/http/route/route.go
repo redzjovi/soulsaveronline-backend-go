@@ -13,6 +13,9 @@ func NewRoute(
 ) *fiber.App {
 	app.Use(healthcheck.New())
 
+	app.Get("/", func(c *fiber.Ctx) error {
+		return c.SendString("Hello, World!")
+	})
 	app.Get("/device/:id", deviceController.FindByID)
 	app.Post("/device/register", deviceController.Register)
 

@@ -27,5 +27,5 @@ func main() {
 
 	app = route.NewRoute(app, deviceController)
 
-	app.Listen("127.0.0.1:8080")
+	app.Listen(":8000")
 }
