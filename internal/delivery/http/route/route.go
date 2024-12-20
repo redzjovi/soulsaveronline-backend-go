@@ -2,19 +2,19 @@ package route
 
 import (
 	"soulsaveronline-backend-go/internal/delivery/http"
+	"time"
 
 	"github.com/gofiber/fiber/v2"
-	"github.com/gofiber/fiber/v2/middleware/healthcheck"
 )
 
 func NewRoute(
 	app *fiber.App,
 	deviceController *http.DeviceController,
 ) *fiber.App {
-	app.Use(healthcheck.New())
-
 	app.Get("/", func(c *fiber.Ctx) error {
-		return c.SendString("Hello, World!")
+		return c.JSON(fiber.Map{
+			"now": time.Now(),
+		})
 	})
 	app.Get("/device/:id", deviceController.FindByID)
 	app.Post("/device/register", deviceController.Register)
