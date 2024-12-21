@@ -17,6 +17,7 @@ func NewRoute(
 		})
 	})
 	app.Get("/device/:id", deviceController.FindByID)
+	app.Patch("/device/:id", deviceController.Patch)
 	app.Post("/device/register", deviceController.Register)
 
 	return app

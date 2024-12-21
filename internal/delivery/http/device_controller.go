@@ -56,6 +56,33 @@ func (c *DeviceController) Register(ctx *fiber.Ctx) error {
 	return ctx.JSON(model.WebResponse[*model.Device]{Data: device})
 }
 
+func (c *DeviceController) Patch(ctx *fiber.Ctx) error {
+	id := ctx.Params("id")
+
+	request := model.PatchDeviceRequest{}
+
+	if err := ctx.BodyParser(&request); err != nil {
+		return fiber.ErrBadRequest
+	}
+
+	if err := c.validate.Struct(&request); err != nil {
+		return ctx.Status(fiber.StatusUnprocessableEntity).JSON(fiber.Map{
+			"error": NewMapErrorJson(err),
+		})
+	}
+
+	device, err := c.deviceUsecase.Patch(ctx.UserContext(), id, request)
+
+	if err != nil {
+		log.Printf("deviceUsecase.Patch: %v", err)
+		return fiber.ErrInternalServerError
+	} else if device == nil {
+		return fiber.ErrNotFound
+	}
+
+	return ctx.JSON(model.WebResponse[*model.Device]{Data: device})
+}
+
 func NewDeviceController(
 	deviceUsecase *usecase.DeviceUsecase,
 	validate *validator.Validate,
