@@ -27,5 +27,5 @@ func main() {
 
 	app = route.NewRoute(app, deviceController)
 
-	app.Listen(":8000")
+	app.Listen(viper.GetString("APP_ADDR"))
 }
