@@ -5,13 +5,17 @@ import (
 	"soulsaveronline-backend-go/internal/entity"
 
 	"github.com/spf13/viper"
-	"gorm.io/driver/postgres"
+	_ "github.com/tursodatabase/libsql-client-go/libsql"
+	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
 )
 
 func NewDB(v *viper.Viper) *gorm.DB {
-	db, err := gorm.Open(postgres.Open(v.GetString("DB_URL")), &gorm.Config{
+	db, err := gorm.Open(sqlite.New(sqlite.Config{
+		DriverName: "libsql",
+		DSN:        v.GetString("DB_URL"),
+	}), &gorm.Config{
 		Logger: logger.Default.LogMode(logger.Silent),
 	})
 
